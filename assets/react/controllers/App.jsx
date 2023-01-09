@@ -10,7 +10,8 @@ function App() {
     }
     //affichage(render)
     return (
-        <div><h1>{count}</h1><button onClick={handleClick}>Click me</button></div>);
+        <div><h1>{count}</h1><button onClick={handleClick}>Click me</button>
+        </div>);
 }
 
 export default App;
