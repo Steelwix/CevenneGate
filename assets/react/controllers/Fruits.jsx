@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DisplayFruit from './components/DisplayFruit';
 import FruitForm from './components/FruitForm';
 
-function Fruits() {
+function Fruits(props) {
     //state (état, données)
     const [fruits, setFruits] = useState([
         { id: 1, nom: "Abricot" },
@@ -10,7 +10,7 @@ function Fruits() {
         { id: 3, nom: "Cerise" },
         { id: 4, nom: "Framboise" }
     ]);
-
+    const [maVariable, setMaVariable] = useState([props.favoriteFruit]);
 
 
     //comportements
@@ -38,6 +38,7 @@ function Fruits() {
                 {fruits.map((fruit) =>
                     <DisplayFruit fruitInfo={fruit} onFruitDelete={handleDelete} key={fruit.id} />
                 )}</ul>
+            <h3>Mon fruit préféré est le/la {maVariable}</h3>
             <FruitForm handleAdd={handleAdd} />
         </div>);
 }
