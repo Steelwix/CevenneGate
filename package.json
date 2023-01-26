@@ -28,6 +28,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@headlessui/react": "^1.7.7"
+        "@headlessui/react": "^1.7.7",
+        "react-hook-form": "^7.41.5"
     }
 }

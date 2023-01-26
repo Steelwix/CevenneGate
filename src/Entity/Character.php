@@ -31,6 +31,9 @@ class Character
     #[ORM\Column]
     private ?int $critDamage = null;
 
+    #[ORM\OneToOne(inversedBy: 'character', cascade: ['persist', 'remove'])]
+    private ?User $player = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +107,18 @@ class Character
     public function setCritDamage(int $critDamage): self
     {
         $this->critDamage = $critDamage;
+
+        return $this;
+    }
+
+    public function getPlayer(): ?User
+    {
+        return $this->player;
+    }
+
+    public function setPlayer(?User $player): self
+    {
+        $this->player = $player;
 
         return $this;
     }

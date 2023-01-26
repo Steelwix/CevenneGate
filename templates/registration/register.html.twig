@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte
+{% endblock %}
+
+{% block body %}
+
+	<section class="container">
+		<div class="row">
+			<div class="col-12 text-center">
+				<br><br><h3>S'inscrire</h3>
+			</div>
+			<div class="card col-md-10 col-8 mx-auto text-center login-card"><br>
+				{{ form_start(registrationForm) }}<br>
+				{{ form_row(registrationForm.username) }}<br>
+				{{ form_row(registrationForm.email) }}<br>
+				{{ form_row(registrationForm.clearPassword, {
+           		 label: 'Mot de passe'
+        		}) }}<br>
+				{{ form_row(registrationForm.RGPDConsent) }}<br>
+
+				<button type="submit" class="btn btn-primary btn-lg">Créer le compte</button><br>
+				{{ form_end(registrationForm) }}<br>
+				<a class="d-lg-none" href="">Déjà un compte?</a><br><br>
+			</div>
+		</div>
+	</section>
+{% endblock %}
