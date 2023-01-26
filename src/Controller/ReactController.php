@@ -19,8 +19,8 @@ class ReactController extends AbstractController
 
         return $this->render('react/home.html.twig', []);
     }
-    #[Route('/avatar', name: 'app_avatar')]
-    public function avatar(Request $request, EntityManagerInterface $em): Response
+    #[Route('/newheroe', name: 'app_new_heroe')]
+    public function createYourHeroe(Request $request, EntityManagerInterface $em): Response
     {
         $data = json_decode($request->getContent(), true);
         $text = $data['text'];
@@ -36,6 +36,12 @@ class ReactController extends AbstractController
         $em->flush();
 
         return new JsonResponse(['status' => 'success']);
+    }
+    #[Route('/avatar', name: 'app_avatar')]
+    public function avatar(): Response
+    {
+
+        return $this->render('react/avatar.html.twig', []);
     }
     #[Route('/react', name: 'app_react')]
     public function index(): Response

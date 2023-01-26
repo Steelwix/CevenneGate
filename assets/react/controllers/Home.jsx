@@ -10,7 +10,7 @@ function Home() {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch("https://localhost:8000/avatar", {
+        fetch("/newheroe", {
             method: "POST",
             redirect: 'follow',
             headers: { "Content-Type": "application/json" },
@@ -18,7 +18,7 @@ function Home() {
 
         }).then(response => {
             if (response.ok) {
-                window.location = "https://localhost:8000/react";
+                window.location = "/avatar";
             }
         })
             .catch(error => console.error(error));
