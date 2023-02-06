@@ -32,8 +32,6 @@ class ReactController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $text = $data['text'];
         $player = new Character;
-        $versus = new Versus;
-
         $player->setArmor(0);
         $player->setCritChance(0.1);
         $player->setCritDamage(2);
