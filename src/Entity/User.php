@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -35,6 +37,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'player', cascade: ['persist', 'remove'])]
     private ?Character $character = null;
+
+    #[ORM\ManyToMany(targetEntity: Boss::class, inversedBy: 'killedBy')]
+    private Collection $bossBeaten;
+
+    public function __construct()
+    {
+        $this->bossBeaten = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -136,6 +146,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->character = $character;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Boss>
+     */
+    public function getBossBeaten(): Collection
+    {
+        return $this->bossBeaten;
+    }
+
+    public function addBossBeaten(Boss $bossBeaten): self
+    {
+        if (!$this->bossBeaten->contains($bossBeaten)) {
+            $this->bossBeaten->add($bossBeaten);
+        }
+
+        return $this;
+    }
+
+    public function removeBossBeaten(Boss $bossBeaten): self
+    {
+        $this->bossBeaten->removeElement($bossBeaten);
 
         return $this;
     }

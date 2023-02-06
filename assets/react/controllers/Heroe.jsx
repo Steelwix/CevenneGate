@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 function Heroe() {
     const handleClick = () => {
 
-        window.location = "/react";
+        window.location = "/fight";
 
 
     }

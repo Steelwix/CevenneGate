@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Character;
+use App\Entity\Versus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,8 +17,14 @@ class ReactController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
-
-        return $this->render('react/home.html.twig', []);
+        $user = $this->getUser();
+        if ($user) {
+            if ($user->getCharacter()) {
+                return $this->redirectToRoute('app_avatar');
+            }
+            return $this->render('react/home.html.twig', []);
+        }
+        return $this->redirectToRoute('app_login');
     }
     #[Route('/newheroe', name: 'app_new_heroe')]
     public function createYourHeroe(Request $request, EntityManagerInterface $em): Response
@@ -25,6 +32,8 @@ class ReactController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $text = $data['text'];
         $player = new Character;
+        $versus = new Versus;
+
         $player->setArmor(0);
         $player->setCritChance(0.1);
         $player->setCritDamage(2);

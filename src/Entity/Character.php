@@ -29,10 +29,13 @@ class Character
     private ?float $critChance = null;
 
     #[ORM\Column]
-    private ?int $critDamage = null;
+    private ?float $critDamage = null;
 
     #[ORM\OneToOne(inversedBy: 'character', cascade: ['persist', 'remove'])]
     private ?User $player = null;
+
+    #[ORM\OneToOne(mappedBy: 'character', cascade: ['persist', 'remove'])]
+    private ?Boss $boss = null;
 
     public function getId(): ?int
     {
@@ -119,6 +122,28 @@ class Character
     public function setPlayer(?User $player): self
     {
         $this->player = $player;
+
+        return $this;
+    }
+
+    public function getBoss(): ?Boss
+    {
+        return $this->boss;
+    }
+
+    public function setBoss(?Boss $boss): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($boss === null && $this->boss !== null) {
+            $this->boss->setCharacter(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($boss !== null && $boss->getCharacter() !== $this) {
+            $boss->setCharacter($this);
+        }
+
+        $this->boss = $boss;
 
         return $this;
     }

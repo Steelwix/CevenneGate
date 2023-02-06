@@ -4,14 +4,22 @@
 {% endblock %}
 
 {% block body %}
-	<div class="bg-white">
+	<div class="">
 		<div class="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
 			<div class="text-center">
+
 				<p>Bienvenue aux portes de Cevenne,
-					{{app.user.username}}</p>
+					{% if app.user.username is defined %}
+						{{app.user.username}}</p>
+				</p>
 				<p>Choisissez un nom pour votre héros</p>
 				<div {{ react_component('Home') }}></div>
-			</div>
-		</div>
+		{% else %}
+			</p>
+			<p>
+				<a href="{{path('app_login')}}">Identifiez vous</a>
+				pour ouvrir les portes</p>
+		{% endif %}
+
 	</div>
-{% endblock %}
+</div></div>{% endblock %}
