@@ -43,15 +43,22 @@ class FightController extends AbstractController
         }
         while ($newBoss == null) {
             $newBossId = $topId + 1;
-            $newBoss = $bossRepository->findById($newBossId);
+            $newBoss = $bossRepository->findOneById($newBossId);
             $topId = $topId + 1;
         }
+        $boss = $newBoss->getCharacter();
         //if newBoss is null, have to find the lowest Boss id
         try {
             $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
             $playerPackage = $serializer->serialize($player, 'json');
+            $bossPackage = $serializer->serialize($boss, 'json');
         } catch (CircularReferenceException $e) {
             $playerPackage = $serializer->serialize($player, 'json', [
+                ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
+                    return $object->getId();
+                }
+            ]);
+            $bossPackage = $serializer->serialize($boss, 'json', [
                 ObjectNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
                     return $object->getId();
                 }
@@ -59,6 +66,6 @@ class FightController extends AbstractController
         } catch (ExceptionInterface $e) {
             // ...
         }
-        return $this->render('fight/index.html.twig', ['player' => $playerPackage, 'boss' => $boss]);
+        return $this->render('fight/index.html.twig', ['player' => $playerPackage, 'boss' => $bossPackage]);
     }
 }
