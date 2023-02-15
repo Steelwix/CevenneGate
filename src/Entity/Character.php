@@ -37,6 +37,9 @@ class Character
     #[ORM\OneToOne(mappedBy: 'character', cascade: ['persist', 'remove'])]
     private ?Boss $boss = null;
 
+    #[ORM\Column]
+    private ?int $speed = 20;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -144,6 +147,18 @@ class Character
         }
 
         $this->boss = $boss;
+
+        return $this;
+    }
+
+    public function getSpeed(): ?int
+    {
+        return $this->speed;
+    }
+
+    public function setSpeed(int $speed): self
+    {
+        $this->speed = $speed;
 
         return $this;
     }
