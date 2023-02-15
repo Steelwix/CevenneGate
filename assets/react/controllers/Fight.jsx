@@ -9,22 +9,26 @@ function Fight(props) {
     const [player, setPlayer] = useState(playerData);
     const [boss, setBoss] = useState(bossData);
     while (player.hp > 0 && boss.hp > 0) {
-        console.log(player);
-        const luckCall = () => {
+        const setDamage = (object) => {
+            let damage = object.physicalDamage;
             const randomValue = Math.random();
-            return randomValue;
+            if (object.critChance > randomValue) {
+                damage = object.physicalDamage * object.critDamage;
+                console.log("CRITIQUE");
+            }
+            return damage;
+
         }
         const handlerPlayerAttack = () => {
-            let damage = player.physicalDamage;
-            let luck = luckCall();
-            if (player.critChance > luck) {
-                damage = player.physicalDamage * player.critDamage;
-                console.log("CRITIQUE ", damage, luck);
-            }
+            let damage = setDamage(player);
             setBoss({ ...boss, hp: boss.hp - damage });
             console.log("Le boss a subi ", damage);
-            setPlayer({ ...player, hp: player.hp - boss.physicalDamage });
-            console.log("Vous subissez ", boss.physicalDamage);
+            bossAttack();
+        }
+        const bossAttack = () => {
+            let damage = setDamage(boss);
+            setPlayer({ ...player, hp: player.hp - damage });
+            console.log("Vous subissez ", damage);
 
         }
 
