@@ -66,6 +66,6 @@ class FightController extends AbstractController
         } catch (ExceptionInterface $e) {
             // ...
         }
-        return $this->render('fight/index.html.twig', ['player' => $playerPackage, 'boss' => $bossPackage]);
+        return $this->render('fight/index.html.twig', ['playerState' => $playerPackage, 'bossState' => $bossPackage]);
     }
 }
