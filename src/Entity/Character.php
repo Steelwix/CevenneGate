@@ -40,6 +40,9 @@ class Character
     #[ORM\Column]
     private ?int $speed = 20;
 
+    #[ORM\Column]
+    private ?int $maxhp = 100;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,6 +162,18 @@ class Character
     public function setSpeed(int $speed): self
     {
         $this->speed = $speed;
+
+        return $this;
+    }
+
+    public function getMaxhp(): ?int
+    {
+        return $this->maxhp;
+    }
+
+    public function setMaxhp(int $maxhp): self
+    {
+        $this->maxhp = $maxhp;
 
         return $this;
     }
