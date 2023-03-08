@@ -7,7 +7,7 @@ function Fight(props) {
     const [boss, setBoss] = useState(bossData);
     const [object, setObject] = useState(null);
     const [relic, setRelic] = useState(null);
-    const [consoleOutput, setConsoleOutput] = useState(['Le combat commence']);
+    const [consoleOutput, setConsoleOutput] = useState(['Le combat commence :']);
     //Functions
 
     const dodgeSystem = (object, target) => {
@@ -16,6 +16,8 @@ function Fight(props) {
         const dodgeChance = Math.random();
         if (randMaxDodge * maxDodge < dodgeChance * target.speed) {
             console.log(target.name, " A esquivé le coup de ", object.name);
+            setConsoleOutput(prevState => [...prevState, `${target.name} A esquivé le coup de ${object.name}`]);
+
             return true;
         }
 
@@ -24,7 +26,6 @@ function Fight(props) {
     const armorSystem = (target, damage) => {
         let armorEfficient = 75 * (1 - Math.exp(-target.armor / 100));
         let finalDamage = damage - (damage * (armorEfficient / 100));
-        console.log("L'armure de ", target.name, "réduit les degats de ", (armorEfficient / 100), " %");
         return finalDamage;
 
     }
@@ -35,6 +36,7 @@ function Fight(props) {
         if (object.critChance > randomValue) {
             damage = object.physicalDamage + (object.physicalDamage * object.critDamage);
             console.log("CRITIQUE");
+            setConsoleOutput(prevState => [...prevState, `CRITIQUE!`]);
         }
         if (dodgeSystem(object, target)) {
             return damage = 0;
@@ -47,11 +49,13 @@ function Fight(props) {
         let damage = setDamage(player, boss);
         setBoss({ ...boss, hp: boss.hp - damage });
         console.log("Le boss a subi ", damage);
+        setConsoleOutput(prevState => [...prevState, `${boss.name} a subi ${damage}`]);
         bossAttack();
     }
     const bossAttack = (roundNumber) => {
         let damage = setDamage(boss, player);
         setPlayer({ ...player, hp: player.hp - damage });
+        setConsoleOutput(prevState => [...prevState, `Vous subissez ${damage}`]);
         console.log("Vous subissez ", damage);
 
 
@@ -76,10 +80,10 @@ function Fight(props) {
 
         return (<section className="container"><div className="row"><div className="col-12 text-center"><h1>Vous rencontrez {boss.name}</h1></div>
             <div className="col-6"><p>{player.name} : {player.hp}/{player.maxhp}</p>
-                <button onClick={handlerPlayerAttack}>Attaquer</button><br />
-                {relic && <button>Utiliser une relique</button>}<br />
-                {object && <button>Utiliser un objet</button>}<br />
-                <button>Fuir</button><br />
+                <strong> <button onClick={handlerPlayerAttack}>Attaquer </button><br />
+                    {relic && <button>Utiliser une relique</button>}<br />
+                    {object && <button>Utiliser un objet</button>}<br />
+                    <button>Fuir</button></strong><br />
             </div><div className="col-6"><p>{boss.name} : {boss.hp}/ {boss.maxhp}</p></div>
             <div className="col-6"> <ul>{consoleOutput.map((output, index) => (
                 <li key={index}>{output}</li>
