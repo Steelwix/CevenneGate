@@ -24,9 +24,13 @@ class Boss
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'bossBeaten')]
     private Collection $killedBy;
 
+    #[ORM\OneToMany(mappedBy: 'dropOn', targetEntity: Relic::class)]
+    private Collection $relics;
+
     public function __construct()
     {
         $this->killedBy = new ArrayCollection();
+        $this->relics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,6 +84,36 @@ class Boss
     {
         if ($this->killedBy->removeElement($killedBy)) {
             $killedBy->removeBossBeaten($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Relic>
+     */
+    public function getRelics(): Collection
+    {
+        return $this->relics;
+    }
+
+    public function addRelic(Relic $relic): self
+    {
+        if (!$this->relics->contains($relic)) {
+            $this->relics->add($relic);
+            $relic->setDropOn($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelic(Relic $relic): self
+    {
+        if ($this->relics->removeElement($relic)) {
+            // set the owning side to null (unless already changed)
+            if ($relic->getDropOn() === $this) {
+                $relic->setDropOn(null);
+            }
         }
 
         return $this;

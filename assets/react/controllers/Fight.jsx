@@ -52,7 +52,7 @@ function Fight(props) {
         setConsoleOutput(prevState => [...prevState, `${boss.name} a subi ${damage}`]);
         bossAttack();
     }
-    const bossAttack = (roundNumber) => {
+    const bossAttack = () => {
         let damage = setDamage(boss, player);
         setPlayer({ ...player, hp: player.hp - damage });
         setConsoleOutput(prevState => [...prevState, `Vous subissez ${damage}`]);
@@ -60,7 +60,7 @@ function Fight(props) {
 
 
     }
-    const roundTurn = (roundNumber) => {
+    const roundTurn = () => {
         if (boss.speed * Math.random() > player.speed * Math.random()) {
 
             console.log(boss.name, " Vous prend par surprise");
