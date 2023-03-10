@@ -3,11 +3,22 @@ import React, { useState, useEffect } from 'react';
 function Fight(props) {
     const playerData = JSON.parse(props.playerState);
     const bossData = JSON.parse(props.bossState);
+    const relicsData = JSON.parse(props.relicState);
     const [player, setPlayer] = useState(playerData);
     const [boss, setBoss] = useState(bossData);
     const [object, setObject] = useState(null);
-    const [relic, setRelic] = useState(null);
+    const [relic, setRelic] = useState(relicsData);
     const [consoleOutput, setConsoleOutput] = useState(['Le combat commence :']);
+    const rarity = {
+        color: null,
+        name: null
+    }
+    const emptyLoot = {
+        name: null,
+        description: null,
+        rarity: rarity
+    };
+    const [loot, setLoot] = useState(emptyLoot);
     //Functions
 
     const dodgeSystem = (object, target) => {
@@ -70,9 +81,18 @@ function Fight(props) {
         }
 
     }
+    const handleLoot = () => {
+        if (loot.name == null) {
+            const newLoot = relic[Math.floor(Math.random() * relic.length)];
+            setLoot(newLoot);
+        }
+
+    }
     useEffect(() => {
         // Code à exécuter dès l'ouverture de la page
+
         roundTurn();
+
     }, []);
     while (player.hp > 0 && boss.hp > 0) {
 
@@ -80,8 +100,8 @@ function Fight(props) {
 
         return (<section className="container"><div className="row"><div className="col-12 text-center"><h1>Vous rencontrez {boss.name}</h1></div>
             <div className="col-6"><p>{player.name} : {player.hp}/{player.maxhp}</p>
-                <strong> <button onClick={handlerPlayerAttack}>Attaquer </button><br />
-                    {relic && <button>Utiliser une relique</button>}<br />
+                <strong> <button onClick={handlerPlayerAttack}>[ Attaquer ]</button><br />
+                    {player.relic && <button>Utiliser une relique</button>}<br />
                     {object && <button>Utiliser un objet</button>}<br />
                     <button>Fuir</button></strong><br />
             </div><div className="col-6"><p>{boss.name} : {boss.hp}/ {boss.maxhp}</p></div>
@@ -92,6 +112,15 @@ function Fight(props) {
     if (player.hp <= 0) {
         return (<div>Vous êtes mort</div>);
     }
-    return (<div>Vous avez vaincu {boss.name}</div>);
+    return (<div><p> Vous avez vaincu {boss.name}</p>
+        <button onClick={handleLoot}>[ Récuperer le butin ]</button>
+        <p style={{ backgroundColor: loot.rarity.color }}><i>{loot.rarity.name}</i> <strong>{loot.name}</strong></p>
+        <p>{loot.description}</p>
+        {loot.name && <div><h3>Gagner des statistiques</h3>
+            <p>Points de vie: {player.maxhp}</p>
+            <p>Attaque physique: {player.physicalDamage}</p>
+            <p>Mana: {player.maxmana}</p>
+            <p>Vitesse: {player.speed}</p></div>}
+    </div >);
 }
 export default Fight;

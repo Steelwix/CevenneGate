@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CharacterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
@@ -42,6 +44,20 @@ class Character
 
     #[ORM\Column]
     private ?int $maxhp = 100;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $mana = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $maxmana = null;
+
+    #[ORM\ManyToMany(targetEntity: Relic::class, inversedBy: 'characters')]
+    private Collection $relicOwned;
+
+    public function __construct()
+    {
+        $this->relicOwned = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -174,6 +190,54 @@ class Character
     public function setMaxhp(int $maxhp): self
     {
         $this->maxhp = $maxhp;
+
+        return $this;
+    }
+
+    public function getMana(): ?int
+    {
+        return $this->mana;
+    }
+
+    public function setMana(?int $mana): self
+    {
+        $this->mana = $mana;
+
+        return $this;
+    }
+
+    public function getMaxmana(): ?int
+    {
+        return $this->maxmana;
+    }
+
+    public function setMaxmana(?int $maxmana): self
+    {
+        $this->maxmana = $maxmana;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Relic>
+     */
+    public function getRelicOwned(): Collection
+    {
+        return $this->relicOwned;
+    }
+
+    public function addRelicOwned(Relic $relicOwned): self
+    {
+        if (!$this->relicOwned->contains($relicOwned)) {
+            $this->relicOwned->add($relicOwned);
+        }
+
+        return $this;
+    }
+
+    public function removeRelicOwned(Relic $relicOwned): self
+    {
+        $this->relicOwned->removeElement($relicOwned);
 
         return $this;
     }

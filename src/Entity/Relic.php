@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RelicRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RelicRepository::class)]
@@ -27,6 +29,17 @@ class Relic
 
     #[ORM\ManyToOne(inversedBy: 'relics')]
     private ?Rarity $rarity = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $dropRate = null;
+
+    #[ORM\ManyToMany(targetEntity: Character::class, mappedBy: 'relicOwned')]
+    private Collection $characters;
+
+    public function __construct()
+    {
+        $this->characters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +102,45 @@ class Relic
     public function setRarity(?Rarity $rarity): self
     {
         $this->rarity = $rarity;
+
+        return $this;
+    }
+
+    public function getDropRate(): ?float
+    {
+        return $this->dropRate;
+    }
+
+    public function setDropRate(?float $dropRate): self
+    {
+        $this->dropRate = $dropRate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Character>
+     */
+    public function getCharacters(): Collection
+    {
+        return $this->characters;
+    }
+
+    public function addCharacter(Character $character): self
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters->add($character);
+            $character->addRelicOwned($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(Character $character): self
+    {
+        if ($this->characters->removeElement($character)) {
+            $character->removeRelicOwned($this);
+        }
 
         return $this;
     }
